@@ -49,10 +49,18 @@ module top(
         .frame_tick(frame_tick),
         .visible(visible)
     );
+    
+    wire BTNC_clean;
+    
+    debouncer db(
+        .clk(in_clk),
+        .noisy(BTNC),
+        .clean(BTNC_clean)
+    );
  
     game game_inst(
         .in_clk(in_clk),
-        .BTNC(BTNC),
+        .BTNC(BTNC_clean),
         .h_pos(h_pos),
         .v_pos(v_pos),
         .frame_tick(frame_tick),
@@ -60,5 +68,6 @@ module top(
         .G_out(G_in),
         .B_out(B_in)
     );
- 
+    
+
 endmodule
