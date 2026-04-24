@@ -1,0 +1,93 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.1 (win64) Build 5076996 Wed May 22 18:37:14 MDT 2024
+| Date         : Thu Apr 23 17:27:51 2026
+| Host         : ECE-PHO115-06 running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
+| Design       : top
+| Device       : xc7a100t
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    15 |
+|    Minimum number of control sets                        |    15 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    57 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    15 |
+| >= 0 to < 4        |     4 |
+| >= 4 to < 6        |     2 |
+| >= 6 to < 8        |     1 |
+| >= 8 to < 10       |     0 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     1 |
+| >= 14 to < 16      |     0 |
+| >= 16              |     7 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              16 |            8 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              53 |           14 |
+| Yes          | No                    | No                     |               1 |            1 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |             169 |           47 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++-------------------+-------------------------------------+-------------------------------------+------------------+----------------+--------------+
+|    Clock Signal   |            Enable Signal            |           Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
++-------------------+-------------------------------------+-------------------------------------+------------------+----------------+--------------+
+|  vertical_trigger | vga_inst/VGA_VS_i_2_n_0             | vga_inst/VGA_VS_i_1_n_0             |                1 |              1 |         1.00 |
+|  clock            | vga_inst/VGA_HS_i_2_n_0             | vga_inst/VGA_HS_i_1_n_0             |                1 |              1 |         1.00 |
+|  in_clk_IBUF_BUFG | db/clean_i_1_n_0                    |                                     |                1 |              1 |         1.00 |
+| ~in_clk_IBUF_BUFG |                                     |                                     |                1 |              1 |         1.00 |
+|  frame_tick_BUFG  |                                     |                                     |                2 |              4 |         2.00 |
+|  vertical_trigger |                                     |                                     |                2 |              5 |         2.50 |
+|  clock            |                                     |                                     |                3 |              6 |         2.00 |
+|  clock            | vga_inst/h_pos[31]_i_2_n_0          | vga_inst/VGA_R[3]_i_1_n_0           |                5 |             12 |         2.40 |
+|  in_clk_IBUF_BUFG |                                     | db/counter[0]_i_1_n_0               |                5 |             20 |         4.00 |
+|  vertical_trigger | vga_inst/v_pos[31]_i_2_n_0          | vga_inst/v_pos[31]_i_1_n_0          |                8 |             31 |         3.88 |
+|  vertical_trigger | vga_inst/vertical_count[31]_i_2_n_0 | vga_inst/vertical_count[31]_i_1_n_0 |                8 |             31 |         3.88 |
+|  clock            | vga_inst/h_pos[31]_i_2_n_0          | vga_inst/h_pos[31]_i_1_n_0          |                8 |             31 |         3.88 |
+|  clock            | vga_inst/count[31]_i_2_n_0          | vga_inst/count[31]_i_1_n_0          |                8 |             31 |         3.88 |
+|  frame_tick_BUFG  | game_inst/bullet_y[31]_i_2_n_0      | game_inst/bullet_y[31]_i_1_n_0      |                8 |             31 |         3.88 |
+| ~in_clk_IBUF_BUFG |                                     | vga_inst/CD/clear                   |                9 |             33 |         3.67 |
++-------------------+-------------------------------------+-------------------------------------+------------------+----------------+--------------+
+
+
