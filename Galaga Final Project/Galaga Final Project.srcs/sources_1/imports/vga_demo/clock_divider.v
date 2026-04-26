@@ -36,6 +36,7 @@ module Clock_divider(
 			out_clk <= ~out_clk;
 			count <= 0;
 			end
+	   
 	end
 
 
