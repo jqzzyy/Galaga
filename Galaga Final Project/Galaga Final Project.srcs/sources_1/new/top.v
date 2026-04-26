@@ -31,7 +31,8 @@ module top(
     output VGA_HS,
     output VGA_VS,
     output [6:0] cathode,
-    output [7:0] anode
+    output [7:0] anode,
+    output [2:0] led
     );
     
     wire [3:0] R_in, G_in, B_in;
@@ -78,10 +79,12 @@ module top(
         .frame_tick(frame_tick),
         .R_out(R_in),
         .G_out(G_in),
-        .B_out(B_in)
+        .B_out(B_in),
+        .led(led)
     );
     
     counter counter_inst(
+        .rst(~CPU_RESETN),
         .in_clk(in_clk),
         .cathode(cathode),
         .anode(anode)
