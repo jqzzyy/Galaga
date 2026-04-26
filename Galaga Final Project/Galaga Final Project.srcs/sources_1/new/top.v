@@ -24,11 +24,14 @@ module top(
     input in_clk,
     input BTNC,
     input left, right,
+    input CPU_RESETN,
     output [3:0] VGA_R,
     output [3:0] VGA_G,
     output [3:0] VGA_B,
     output VGA_HS,
-    output VGA_VS
+    output VGA_VS,
+    output [6:0] cathode,
+    output [7:0] anode
     );
     
     wire [3:0] R_in, G_in, B_in;
@@ -66,6 +69,7 @@ module top(
  
     game game_inst(
         .in_clk(in_clk),
+        .rst(~CPU_RESETN),
         .BTNC(BTNC_clean),
         .left(left_clean),
         .right(right_clean),
@@ -76,6 +80,12 @@ module top(
         .G_out(G_in),
         .B_out(B_in)
     );
+    
+    counter counter_inst(
+        .in_clk(in_clk),
+        .cathode(cathode),
+        .anode(anode)
+        );
     
 
 endmodule
