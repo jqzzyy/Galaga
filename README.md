@@ -3,7 +3,7 @@
 # EC311 Logic Design Final Project
 
 ### How to Play
-- Move left and right with the arrow buttons
+- Move left and right with the buttons
 - Press the center button to shoot
 - Kill all enemies to advance to the next level, each level the enemy bullets get slightly faster
 - You have 3 lives shown on the LEDs 
