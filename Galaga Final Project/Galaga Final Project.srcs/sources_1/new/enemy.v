@@ -39,7 +39,6 @@ module enemy #(
     // chosen once at fire time from PRNG, fixed for bullet's lifetime
     // -------------------------------------------------------------------------
     reg [1:0]  drift_mode;
-    reg [1:0]  drift_count;
     reg [31:0] shoot_timer;
     reg [9:0]  escanline_count;
 
@@ -72,7 +71,6 @@ module enemy #(
         ebullet_x       = 0;
         ebullet_y       = 0;
         drift_mode      = 0;
-        drift_count     = 0;
         shoot_timer     = INIT_TIMER;
         escanline_count = 0;
         prng_rst        = 1;
@@ -139,6 +137,7 @@ module enemy #(
     always @(posedge frame) begin
 
         // shoot timer countdown every scanline tick
+        prng_load <= 0; // default: don't reload
         if (enemy_alive) begin
             if (shoot_timer > 0) begin
                 shoot_timer <= shoot_timer - 1;
@@ -146,15 +145,16 @@ module enemy #(
                 ebullet     <= 1;
                 ebullet_x   <= enemy_x + 6;
                 ebullet_y   <= enemy_y + 16;
-                drift_count <= 0;
-                // pick drift mode from 2 PRNG bits:
-                // 00,01 = straight, 10 = drift right, 11 = drift left
-                case (prng_out[1:0])
-                    2'b10:   drift_mode <= 2'b01; // right
-                    2'b11:   drift_mode <= 2'b10; // left
-                    default: drift_mode <= 2'b00; // straight
-                endcase
+                // pick drift using bits [15:12] (0-15):
+                // 0-7 = straight (~50%), 8-11 = right (~25%), 12-15 = left (~25%)
+                if (prng_out[15:12] <= 4'd7)
+                    drift_mode <= 2'b00;
+                else if (prng_out[15:12] <= 4'd11)
+                    drift_mode <= 2'b01;
+                else
+                    drift_mode <= 2'b10;
                 shoot_timer <= 32'd315000 + {16'd0, prng_out} * 32'd9;
+                prng_load   <= 1; // pulse load to reseed PRNG with current output
             end
         end
 
@@ -170,17 +170,12 @@ module enemy #(
                 end else begin
                     ebullet_y <= ebullet_y + 4; // 4px/frame downward
 
-                    // apply fixed drift every 3 frames
-                    if (drift_count == 2) begin
-                        drift_count <= 0;
-                        if (drift_mode == 2'b01 && ebullet_x < 624)
-                            ebullet_x <= ebullet_x + 1;
-                        else if (drift_mode == 2'b10 && ebullet_x > 160)
-                            ebullet_x <= ebullet_x - 1;
-                        // drift_mode 00: no horizontal movement
-                    end else begin
-                        drift_count <= drift_count + 1;
-                    end
+                    // drift every frame
+                    if (drift_mode == 2'b01 && ebullet_x < 624)
+                        ebullet_x <= ebullet_x + 1;
+                    else if (drift_mode == 2'b10 && ebullet_x > 160)
+                        ebullet_x <= ebullet_x - 1;
+                    // drift_mode 00: straight down, no horizontal movement
                 end
             end
         end

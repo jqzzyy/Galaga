@@ -38,6 +38,7 @@ module top(
     wire [3:0] R_in, G_in, B_in;
     wire [31:0] h_pos, v_pos;
     wire frame_tick, visible;
+    wire [15:0] score;
     
     wire left_clean, right_clean;
     
@@ -80,12 +81,14 @@ module top(
         .R_out(R_in),
         .G_out(G_in),
         .B_out(B_in),
-        .led(led)
+        .led(led),
+        .score_out(score)
     );
     
     counter counter_inst(
         .rst(~CPU_RESETN),
         .in_clk(in_clk),
+        .score(score),
         .cathode(cathode),
         .anode(anode)
         );

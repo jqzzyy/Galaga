@@ -21,34 +21,17 @@
 
 
 module counter(
-        input in_clk, // 100 MHz clock from the board
+        input in_clk,
         input rst,
+        input [15:0] score,
         output [6:0] cathode,
         output [7:0] anode
     );
-    wire seconds_clock; // 1 Hz
-	wire fsm_clock;     // 1 kHz
-    reg [15:0] counter; // this is the number we want to display
-    reg seconds_prev;
-    
-    initial
-        begin
-            counter = 0;
-        end
-    // instantiate the clock divider to drive the 1 Hz signal
-    clock_div c(.in_clk(in_clk), .out_clk(seconds_clock));
+    wire fsm_clock; // 1 kHz
+
     // instantiate the faster clock divider to drive the 1 kHz signal
     faster_clock_divider fc(.in_clk(in_clk), .out_clk(fsm_clock));
-	// instantiate the FSM using the fsm_clock signal
-    fsm f(.clock(fsm_clock), .sixteen_bit_number(counter), .anode(anode), .cathode(cathode));
-    always @(posedge in_clk)
-	begin
-	   seconds_prev <= seconds_clock;
-        // increment counter
-        if (rst)
-            counter <= 0;
-        else if (seconds_clock && !seconds_prev)
-            counter <= counter + 1;
-	end
-	
+    // display the score directly on the 7-segment display
+    fsm f(.clock(fsm_clock), .sixteen_bit_number(score), .anode(anode), .cathode(cathode));
+
 endmodule
